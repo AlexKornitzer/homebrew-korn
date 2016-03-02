@@ -8,29 +8,29 @@ class Metasploit < Formula
     sha1 'd9ce2ed088967a4b5e1f957aa09cc70cf60bf01a'
   end
 
-  # Resources
-
-
   # Add the depends on
-  # NOTE: Cant use the system ruby as then we cant install gems!
   depends_on "libxml2"
   depends_on "postgresql"
-  depends_on "ruby"
+  # NOTE: Cant use the system ruby as then we need sudo to install gems!
+  depends_on "ruby" if !which("bundle")
 
   def install
-    # NOTE: Maybe we should use brew gem and manually list all the gems we need?
-    # Install the bundle gem if it is not installed
-#    if which("bundle").to_s != "#{HOMEBREW_PREFIX}/bin/bundle"
-      system "gem", "install", "bundler"
-#    end
-
-    # Lazily get bundle to install the gems using bundle
-    system "#{HOMEBREW_PREFIX}/bin/bundle", "install"
+    # Get the path to bundle, install if required
+    bundler_path = which("bundle").to_s
+    if !which("bundle")
+      bundler_path = "#{HOMEBREW_PREFIX}/bin/bundle"
+      if !File.exist?(bundler_path)
+        system "gem", "install", "bundler"
+      end
+    end
 
     # Install the metasploit framework
     libexec.install Dir["*"]
     bin.mkpath
     Dir["#{libexec}/msf*"].each {|f| ln_s f, bin}
+
+    # Install all required gems into the libexec of the Keg
+    (libexec).cd { system "#{bundler_path}", "install", "--path", "vendor/bundle" }
   end
 
   def caveats;<<-EOS.undent
