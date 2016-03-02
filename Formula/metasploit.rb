@@ -49,21 +49,24 @@ class Metasploit < Formula
         createuser msf -P -h localhost
         createdb -O msf msf -h localhost
 
-      4. Create a file '' with the following:
+      4. Create a file '~/.msf4/database.yml' with the following:
         # Development Database
         development: &pgsql
-          adapter: postgresql
-          database: msf
-          username: msf
-          password: YOUR_PASSWORD_FOR_PGSQL
-          host: localhost
-          port: 5432
-          pool: 5
-          timeout: 5
+         adapter: postgresql
+         database: msf
+         username: msf
+         password: YOUR_PASSWORD_FOR_PGSQL
+         host: localhost
+         port: 5432
+         pool: 5
+         timeout: 5
 
         # Production database -- same as dev
         production: &production
-          <<: *pgsql
+         <<: *pgsql
+
+      5. Test the development database with the following command:
+        msfconsole -qx "db_status; exit"
     EOS
   end
 
