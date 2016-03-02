@@ -66,4 +66,9 @@ class Metasploit < Formula
           <<: *pgsql
     EOS
   end
+
+  test do
+    # Some very basic tests, let check that mach scan can find data from ls
+    system "#{bin}/msfelfscan", "-p", "/bin/ls"
+  end
 end
