@@ -5,7 +5,7 @@ class Metasploit < Formula
 
   stable do
     url "http://downloads.metasploit.com/data/releases/archive/framework-4.11.3-2015070901.tar.bz2"
-    sha1 'd9ce2ed088967a4b5e1f957aa09cc70cf60bf01a'
+    sha256 'b336516d697d3c13c2b663489a6b6160dc0812fb6e81b569dd0adf8188b33f8a'
   end
 
   # Add the depends on
